@@ -78,6 +78,7 @@ const LearnerSubmissions = [
 
 function getLearnerData(course, ag, submissions) {
   // here, we would process this data to achieve the desired result.
+try{
 const result = [];
 const learners ={};
 
@@ -120,9 +121,14 @@ for(const sub of submissions){
   learners[sub.learner_id].totalPoints += points;
 }
 
-for (const id in learners){
+const learnerIDs = Object.keys(learners);
+
+for (let i = 0; i < learnerIDs.length; i++) {
+
+  const id = learnerIDs[i];
   const learner = learners[id];
-  learners.avg = Number ((learners.totalPoints/learners.totalPoints).toFixed(3));
+
+  learner.avg = Number((learner.totalScore / learner.totalPoints).toFixed(3));
   delete learner.totalScore;
   delete learner.totalPoints;
   result.push(learner);
@@ -145,11 +151,11 @@ for (const id in learners){
   // ];
 
   return result;
-// } catch(err){
+} catch(err){
 
-//   console.error();
-//   return[]
-// }
+  console.error("Failed", err.message);
+  return[]
+}
 }
 
 const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
